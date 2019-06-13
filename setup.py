@@ -9,4 +9,5 @@ setup(name='better-scouting',
         'requests',
         'ansicolors',
         'pytube',
+        'tqdm',
       ])

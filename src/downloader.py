@@ -18,6 +18,16 @@ from datetime import datetime
 import requests
 import pytube
 from colors import color
+from tqdm import tqdm
+
+
+class Progress(tqdm):
+    received = 0
+
+    def update_remaining(self, stream, chunk, file_handle, bytes_remaining):
+        self.update(self.total - bytes_remaining - self.received)
+        self.received = self.total - bytes_remaining
+
 
 with open("tba.json", "r") as auth:
     headers = json.load(auth)
@@ -96,7 +106,16 @@ while True:
         print("Downloading...")
         start = datetime.now()
         yt = pytube.YouTube(url)
-        yt.streams.first().download(output_path=path, filename=key)
+        stream = yt.streams.first()
+        with Progress(total=stream.filesize,
+                      unit='B',
+                      unit_scale=True,
+                      bar_format='{{l_bar}}{}{{r_bar}}'
+                      .format(color('{bar}', fg='green')),
+                      dynamic_ncols=True) as progress:
+            yt.register_on_progress_callback(progress.update_remaining)
+            stream.download(output_path=path, filename=key)
+        
         elapsed = datetime.now() - start
         print(color("Download complete. ", fg='green') +
               "({} elapsed)".format(elapsed))
