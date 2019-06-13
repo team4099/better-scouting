@@ -98,26 +98,26 @@ while True:
             continue
         print("Current match: {}".format(key))
 
-        videos = match['videos']
-        video = [v for v in videos if v['type'] == 'youtube'][0]
-        url = pytube.extract.watch_url(video['key'])
-        print("YouTube URL: {}".format(url))
+        videos = [v for v in match['videos'] if v['type'] == 'youtube']
+        for j, video in enumerate(videos):
+            url = pytube.extract.watch_url(video['key'])
+            print("YouTube URL: {}".format(url))
 
-        print("Downloading...")
-        start = datetime.now()
-        yt = pytube.YouTube(url)
-        stream = yt.streams.first()
-        with Progress(total=stream.filesize,
-                      unit='B',
-                      unit_scale=True,
-                      bar_format='{{l_bar}}{}{{r_bar}}'
-                      .format(color('{bar}', fg='green')),
-                      dynamic_ncols=True) as progress:
-            yt.register_on_progress_callback(progress.update_remaining)
-            stream.download(output_path=path, filename=key)
-        
-        elapsed = datetime.now() - start
-        print(color("Download complete. ", fg='green') +
-              "({} elapsed)".format(elapsed))
+            print("Downloading...")
+            start = datetime.now()
+            yt = pytube.YouTube(url)
+            stream = yt.streams.first()
+            with Progress(total=stream.filesize,
+                          unit='B',
+                          unit_scale=True,
+                          bar_format='{{l_bar}}{}{{r_bar}}'
+                          .format(color('{bar}', fg='green')),
+                          dynamic_ncols=True) as progress:
+                yt.register_on_progress_callback(progress.update_remaining)
+                stream.download(output_path=path, filename=key + '_' + str(j))
+
+            elapsed = datetime.now() - start
+            print(color("Download complete. ", fg='green') +
+                  "({} elapsed)".format(elapsed))
 
         i += 1
