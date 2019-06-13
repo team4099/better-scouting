@@ -72,7 +72,7 @@ while True:
         else:
             print(color("Invalid number.", fg='red'))
 
-    path = os.path.join("data", "videos", str(year), event_code)
+    path = os.path.join('..', 'data', 'videos', str(year), event_code)
     if not os.path.isdir(path):
         os.makedirs(path)
 
