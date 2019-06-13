@@ -1,2 +1,2 @@
 # Better Scouting™
-## scouting, but better
+## Scouting, but better.
