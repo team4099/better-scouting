@@ -90,7 +90,7 @@ while True:
     random.shuffle(matches)
     i = 0
     index = -1
-    while i < n:
+    while i < n and index < n - 1:
         index += 1
         match = matches[index]
         key = match['key']
