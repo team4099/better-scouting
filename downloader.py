@@ -1,3 +1,14 @@
+"""
+A simple CLI application intended for batch downloads of FRC match
+videos. Videos download to `data/videos/{year}/{event}`.
+
+Depends on pytube to download YouTube videos - however, there seems to
+be a bug in the current release of pytube. As a workaround, I made the
+change proposed on https://github.com/nficano/pytube/pull/395 to my
+local pytube version, and would advise doing the same until the pull
+request is merged into pytube.
+"""
+
 import json
 import random
 import os
