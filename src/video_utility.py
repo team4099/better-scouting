@@ -80,7 +80,7 @@ def tag_directory(year='*', event='*'):
         with open(filename, 'r') as file:
             data = json.load(file)
 
-        for video in glob(os.path.join(folder, '*')):
+        for video in glob(os.path.join(folder, '*.mp4')):
             if video in data:
                 continue
             data[video] = tag_video(video)
