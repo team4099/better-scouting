@@ -14,8 +14,8 @@ START_HIGH = 3000
 END_LOW = 2000
 END_HIGH = 4000
 
-_, start_sample = wavfile.read(os.path.join('assets',
-                            'match_start_upsampled.wav'))
+rate, start_sample = wavfile.read(os.path.join('assets',
+                                  'match_start_upsampled.wav'))
 _, end_sample = wavfile.read(os.path.join('assets', 'match_end_upsampled.wav'))
 
 
@@ -37,7 +37,7 @@ def extract_audio(video):
     out, err = (
         ffmpeg
         .input(video)
-        .output('-', format='wav', ac=1, ar=44100)
+        .output('-', format='wav', ac=1, ar=rate)
         .overwrite_output()
         .run(capture_stdout=True, capture_stderr=True)
     )
