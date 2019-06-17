@@ -15,6 +15,8 @@ START_LOW = 600
 START_HIGH = 3000
 END_LOW = 2000
 END_HIGH = 4000
+THRESH = 1e5
+MATCH_LENGTH = 150
 
 rate, start_sample = wavfile.read(os.path.join('assets',
                                   'match_start_upsampled.wav'))
@@ -55,20 +57,31 @@ def extract_audio(video):
     return wavfile.read(BytesIO(riff))
 
 
-def localize(signal, sample, lowcut, highcut, freq):
+def localize(signal, sample, lowcut, highcut, freq=rate):
     filtered = butter_bandpass_filter(signal, lowcut, highcut, freq)
-    with warnings.catchwarnings():
-        corr = correlate(filtered, sample)
-    return abs(corr).argmax() - sample.size
+    with warnings.catch_warnings():
+        corr = abs(correlate(filtered, sample))
+    index = corr.argmax()
+    return index - sample.size, corr[index]
 
 
 def tag_video(filename):
     rate, audio = extract_audio(filename)
-    start = localize(audio, start_sample, START_LOW, START_HIGH, rate)
-    end = localize(audio, end_sample, END_LOW, END_HIGH, rate)
+    start, start_val = localize(audio, start_sample, START_LOW, START_HIGH)
+    end, end_val = localize(audio, end_sample, END_LOW, END_HIGH)
+
+    start_time = start / rate
+    end_time = end / rate
+    if start_val > THRESH > end_val:
+        end_time = start_time + MATCH_LENGTH
+    elif end_val > THRESH > start_val:
+        start_time = end_time - MATCH_LENGTH
+    elif start_val < THRESH > end_val:
+        start_time = end_time = None
+
     return {
-        'start': start / rate,
-        'end': end / rate
+        'start': start_time,
+        'end': end_time
     }
 
 
