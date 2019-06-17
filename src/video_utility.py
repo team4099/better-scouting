@@ -57,7 +57,7 @@ def extract_audio(video):
 
 
 def localize(signal, sample, lowcut, highcut, freq):
-    filtered = butter_bandpass_filter(signal, lowcut, highcut, freq, order=6)
+    filtered = butter_bandpass_filter(signal, lowcut, highcut, freq)
     with warnings.catchwarnings():
         corr = correlate(filtered, sample)
     return abs(corr).argmax() - sample.size
