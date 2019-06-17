@@ -8,6 +8,8 @@ import numpy as numpy
 from scipy.fftpack import fft
 from scipy.signal import butter, lfilter, correlate
 from scipy.io import wavfile
+from colors import color
+from tqdm import tqdm
 
 START_LOW = 600
 START_HIGH = 3000
@@ -69,7 +71,7 @@ def tag_video(filename):
     }
 
 
-def tag_directory(year='*', event='*'):
+def tag_directory(year='*', event='*', progress=False):
     for folder in glob(os.path.join('..', 'data', 'videos', year, event)):
         if not os.path.isdir(folder):
             continue
@@ -80,7 +82,16 @@ def tag_directory(year='*', event='*'):
         with open(filename, 'r') as file:
             data = json.load(file)
 
-        for video in glob(os.path.join(folder, '*.mp4')):
+        videos = glob(os.path.join(folder, '*.mp4'))
+        if progress == True:
+            print("Folder: {}".format(folder))
+            videos = tqdm(videos,
+                          unit='videos',
+                          unit_scale=False,
+                          bar_format='{{l_bar}}{}{{r_bar}}'
+                          .format(color('{bar}', fg='green')),
+                          dynamic_ncols=True)
+        for video in videos:
             if video in data:
                 continue
             data[video] = tag_video(video)
