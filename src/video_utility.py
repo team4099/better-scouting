@@ -1,5 +1,6 @@
 import os
 import json
+import warnings
 from glob import glob
 from io import BytesIO
 
@@ -57,7 +58,8 @@ def extract_audio(video):
 
 def localize(signal, sample, lowcut, highcut, freq):
     filtered = butter_bandpass_filter(signal, lowcut, highcut, freq, order=6)
-    corr = correlate(filtered, sample)
+    with warnings.catchwarnings():
+        corr = correlate(filtered, sample)
     return abs(corr).argmax() - sample.size
 
 
