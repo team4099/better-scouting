@@ -84,7 +84,6 @@ def tag_directory(year='*', event='*'):
             if video in data:
                 continue
             data[video] = tag_video(video)
-            print(video, data[video])
 
         with open(filename, 'w') as file:
             json.dump(data, file)
