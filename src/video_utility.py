@@ -5,7 +5,6 @@ from glob import glob
 from io import BytesIO
 
 import ffmpeg
-import numpy as numpy
 from scipy.fftpack import fft
 from scipy.signal import butter, lfilter, correlate
 from scipy.io import wavfile
