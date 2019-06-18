@@ -1,6 +1,7 @@
 import os
 import json
 import warnings
+import random
 from glob import glob
 from io import BytesIO
 
@@ -113,3 +114,35 @@ def tag_directory(year='*', event='*', progress=False):
 
         with open(filename, 'w') as file:
             json.dump(data, file)
+
+
+def select_frame(year='*', event='*'):
+    videos = glob(os.path.join('..', 'data', 'videos', year, event, '*'))
+    video = random.choice(videos)
+
+    folder = os.path.dirname(video)
+    data_path = os.path.join(folder, '.metadata')
+    if not os.path.exists(data_path):
+        raise
+    with open(data_path, 'r') as file:
+        data = json.load(file)
+
+    match_info = data[video]
+    start, end = match_info['start'], match_info['end']
+    if start is None or end is None or start > end or start < 0 or end < 0:
+        return select_frame(year, event)
+
+    info = ffmpeg.probe(video)['streams'][0]
+    framerate = float(info['nb_frames']) / float(info['duration'])
+    lower = int(start * framerate)
+    upper = int(end * framerate)
+    frame_number = random.randint(lower, upper)
+
+    out, err = (
+        ffmpeg
+        .input(video)
+        .filter('select', 'eq(n,{})'.format(frame_number))
+        .output('pipe:', format='image2', vcodec='png', vframes=1)
+        .run(capture_stdout=True, capture_stderr=True)
+    )
+    return out
