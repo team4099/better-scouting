@@ -16,7 +16,7 @@ course of a match. The following is a rough roadmap of the components
 currently thought to be needed to complete this task:
 
 - [x] A script to batch download match videos from The Blue Alliance
-- [ ] A script to extract arbitrary frames within matches for use in
+- [X] A script to extract arbitrary frames within matches for use in
 training/testing data
 - [ ] Manually tagged bounding boxes on robots within match images
 - [ ] An object detection model trained on the bounding boxes dataset
