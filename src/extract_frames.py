@@ -5,7 +5,7 @@ from glob import glob
 import tkinter as tk
 from PIL import Image, ImageTk
 
-from video_utility import select_frame
+from video_utility import select_frame, tag_directory
 
 
 def valid(event):
@@ -30,6 +30,7 @@ def invalid(event):
 
 year = input("Year: ")
 event = input("Event: ")
+tag_directory(year, event, progress=True)
 valid_path = os.path.join('..', 'data', 'images', year, 'valid')
 invalid_path = os.path.join('..', 'data', 'images', year, 'invalid')
 valid_count = len(glob(os.path.join(valid_path, '*')))
