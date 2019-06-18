@@ -29,6 +29,7 @@ def invalid(event):
 
 
 year = input("Year: ")
+event = input("Event: ")
 valid_path = os.path.join('..', 'data', 'images', year, 'valid')
 invalid_path = os.path.join('..', 'data', 'images', year, 'invalid')
 valid_count = len(glob(os.path.join(valid_path, '*')))
@@ -43,7 +44,7 @@ number = int(input("Number of images: "))
 
 for _ in range(number):
     root = tk.Tk()
-    data = select_frame()
+    data = select_frame(year, event)
     image = Image.open(BytesIO(data))
     photo = ImageTk.PhotoImage(image)
     label = tk.Label(root, image=photo)
