@@ -18,7 +18,15 @@ currently thought to be needed to complete this task:
 - [x] A script to batch download match videos from The Blue Alliance
 - [X] A script to extract arbitrary frames within matches for use in
 training/testing data
-- [ ] Manually tagged bounding boxes on robots within match images
-- [ ] An object detection model trained on the bounding boxes dataset
+- [X] Manually tagged bounding boxes on robots within match images
+- [X] An object detection model trained on the bounding boxes dataset
 - [ ] An object tracking model reinforced by the aforementioned object
 detection model
+
+The robot detection uses the YOLO model and was trained using darknet.
+The current weights were obtained after training for 4000 iterations
+on a total of 253 images of manually tagged match footage. Here are some
+examples of its output:
+
+![Robot Detection 1](./examples/detection01.jpg)
+![Robot Detection 1](./examples/detection02.jpg)
