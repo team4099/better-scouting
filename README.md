@@ -23,6 +23,12 @@ training/testing data
 - [ ] An object tracking model reinforced by the aforementioned object
 detection model
 
+The frame extraction code is based on identifying the start and end of
+the match using the standard FRC start and end sounds. The process
+consists of bandpass filtering the match audio to remove extraneous
+frequencies, and then finding cross-correlation peaks between the match
+audio and the sample audio features.
+
 The robot detection uses the YOLO model and was trained using darknet.
 The current weights were obtained after training for 4000 iterations
 on a total of 253 images of manually tagged match footage. Here are some
